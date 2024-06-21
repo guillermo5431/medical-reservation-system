@@ -9,11 +9,11 @@ function index() {
     <>
     <Navbar bg="primary" data-bs-theme="dark">
     <Container>
-      <Nnavbar.Brand as={Link} to="/">Navbar</Nnavbar.Brand>
+      <Navbar.Brand as={Link} to="/">Navbar</Navbar.Brand>
       <Nav className="me-auto">
         <Nav.Link as={Link} to="/doctor">Doctor</Nav.Link>
-        <Nav.Link as={Link} to="/patient">Features</Nav.Link>
-        <Nav.Link as={Link} to="/appointment">Pricing</Nav.Link>
+        <Nav.Link as={Link} to="/patient">Patient</Nav.Link>
+        <Nav.Link as={Link} to="/appointment">Appointment</Nav.Link>
       </Nav>
     </Container>
   </Navbar>
