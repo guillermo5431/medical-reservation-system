@@ -29,7 +29,4 @@ Next there is the Report Form page. This page contains all of the data reports f
 - **Employees Report**: Displays the contact information for each employee in the clinic. Uses a union of both Doctor and Admin, each which were joined with office to get further information for each employee.
 
 
-## Installing/running the project
-To view the hosted project: go here: www.medical-service.infinityfreeapp.com
 
-To run the project locally (with XAMPP): first download all the files into the C:\xampp\htdocs folder. Then open the XAMPP controll panel, start the Apache server, and open 'http://localhost/cosc3380/' in a web browser.
