@@ -1,70 +1,32 @@
-# Getting Started with Create React App
+# Medical-Clinic-Database
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## About the project
+This website was created as a group project for COSC3380, and is meant to be used by a small medical clinic further help them execute necessary business operations. There are three different user types that can use this website: Patients, Doctors, and Administrators. Each user type has the ability to login in, but only Patients are allowed to use the sign up. Once logged in, each user is automatically redirected to the main page for their user type. Each user type is presented with different relevent information and features to help them execute their intended tasks. Also, all users have access to the navbar at the top of the page, which easily allows them to navigate to the main page, authentication pages, and main user type page. The main user type page is accessible through the "Manage Appointments" button.
 
-## Available Scripts
+## File structure
 
-In the project directory, you can run:
+### Patient Pages
+The key information displayed is: personal information, appointments, then prescriptions. Patients are given the option to cancel existing appointments, and can also request new appointments with the "Make an Appointment" button. This button redirects users to the requestAppointment pages. This is a series of pages that prompts the logged in user with questions needed to schedule their appointment. The information from some pages determines the display of others. For example, depending on the doctor type chosen, different doctors will be available on the next page. Once a patient reaches the last page and presses the "Submit" button, their appointment request will either pass or fail. If passed, they will see a message stating that their appointment was requested. If failed, they will a message specifying why the appointment request page. In either case, the logged in user will be presented with a link to take them back to their main user page.
 
-### `npm start`
+The appointment request can fail for one of two reasons:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. The Doctor is unavailable on that day at that time because they have a conflicting appointment.
+2. A Patient which has not been authorized to schedule an appointment with a specialist attempted to schedule an appointment with a specialist.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Each of these are implemented with the use of ***triggers*** in our SQL database running in google cloud.
 
-### `npm test`
+### Doctor Pages
+The key information displayed is: personal information, assigned patients, appointments, and their schedule. The only feature given to the doctors is the ability to cancel appointments.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Admin Pages
+The key information displayed is: personal information, appointments, then the other administrators and doctors in the clinic. Admins have a second navbar on the left side which can be used to navigate between the admin pages. First there are four data entry pages, which allows the admin to add, edit, and delete informtion for Doctors, Admins, Patients, and Offices respectively.
 
-### `npm run build`
+Next there is the Report Form page. This page contains all of the data reports for the project. The admin can look at reports for prescriptions, specialists, appointments, and employees.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Prescription Report**: Displays all of the prescriptions given out by the clinic. Uses a left join on patients with the weak entity prescription. When looking at the prescription report, admins can narrow down the serach using a before and after date.
+- **Specialist Report**: Displays the number of each type of specialist in each office. First does a left join on doctors with offices, then groups by specialist.
+- **Appointments Report**: Displays all of the scheduled appointments in the clinic. Uses a left join on Appointments with Patients, Doctors, and Offices to display patient information, doctor information, and office information for each appointment. When looking at the appointments report, admins can narrow down the search using a before and after date.
+- **Employees Report**: Displays the contact information for each employee in the clinic. Uses a union of both Doctor and Admin, each which were joined with office to get further information for each employee.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
