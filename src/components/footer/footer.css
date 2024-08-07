@@ -1,10 +1,36 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.App {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.App > * {
+    flex: 1;
+}
+
+
 .section__padding{
     padding: 4rem 4rem;
 }
 
-.footer{
+
+.footer {
+    margin-top: auto;
     background-color: #2d2d32;
+    padding: 2rem 0;
 }
+
 
 .sb__footer{
     display: flex;
@@ -54,7 +80,7 @@ a{
 .sb__footer-links_div p{
     font-size: 12px;
     line-height: 15px;
-    margin-bottom: 0.5rem 0; 
+    margin-bottom: 0.5rem; 
     cursor: pointer;
 }
 
@@ -134,4 +160,7 @@ hr{
         line-height: 38px;
     }
 }
+
+
+
 

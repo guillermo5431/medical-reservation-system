@@ -1,0 +1,18 @@
+INSERT INTO `admin` (`admin_id`, `office_id`, `name`, `password`, `phone_number`, `email`, `appointment_approval`) VALUES
+(1, 1, 'John Smith', SHA2('password123', 256), '0123456789', 'john.smith@example.com', 1),
+(2, 2, 'Jane Doe', SHA2('password456', 256), '0987654321', 'jane.doe@example.com', 0),
+(3, 3, 'Alice Johnson', SHA2('password789', 256), '1112223333', 'alice.johnson@example.com', 1);
+
+
+
+INSERT INTO `doctor` (`doctor_id`, `office_id`, `speciality`, `name`, `password`, `phone_number`, `email`) VALUES
+(1, 1, 'Cardiology', 'Dr. Robert Brown', SHA2('password123', 256), '1234567890', 'robert.brown@hospital.com'),
+(2, 2, 'Neurology', 'Dr. Emily Davis', SHA2('password456', 256), '2345678901', 'emily.davis@hospital.com'),
+(3, 3, 'Pediatrics', 'Dr. Michael Wilson', SHA2('password789', 256), '3456789012', 'michael.wilson@hospital.com');
+
+
+INSERT INTO `patient` (`patient_id`, `primary_physician_id`, `specialist_approved`, `specialist_check`, `name`, `password`, `phone_number`, `email`, `age`) VALUES
+(1, 1, 1, 'YES', 'Charlie Brown', SHA2('password123', 256), '4567890123', 'charlie.brown@domain.com', 30),
+(2, 2, 0, 'NO', 'Lucy Smith', SHA2('password456', 256), '5678901234', 'lucy.smith@domain.com', 25),
+(3, 3, 1, 'YES', 'Linus Van Pelt', SHA2('password789', 256), '6789012345', 'linus.vanpelt@domain.com', 35);
+
