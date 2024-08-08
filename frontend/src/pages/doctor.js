@@ -3,7 +3,7 @@ import axios from 'axios';
 
 
 
-function doctor() {
+function Doctor() {
   const [doctors, setDoctors] = useState  ([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -54,4 +54,4 @@ function doctor() {
   )
 }
 
-export default doctor
+export default Doctor
