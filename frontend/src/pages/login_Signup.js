@@ -11,7 +11,7 @@ const LoginSignup = () => {
     const [action,setAction] = useState("Login");
 
   return (
-    <div className='container'>
+    <div className='custom-container'>
     <div className="header">
       <div className="text">{action}</div>
       <div className='underline'></div>
