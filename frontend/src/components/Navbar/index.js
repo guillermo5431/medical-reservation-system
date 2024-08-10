@@ -19,8 +19,8 @@ function index() {
         <NavDropdown title='Patient Portal' id='basic-nav-dropdown'>
           <NavDropdown.Item as={Link} to='/login'>Login</NavDropdown.Item>
           <NavDropdown.Item as={Link} to='/signup'>Signup</NavDropdown.Item>
+          <NavDropdown.Item as={Link} to='/login_Signup'>Login/Signup</NavDropdown.Item>
         </NavDropdown>
-
       </Nav>
     </Container>
   </Navbar>
