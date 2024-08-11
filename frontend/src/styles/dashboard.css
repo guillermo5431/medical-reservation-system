@@ -1,0 +1,12 @@
+.dashboard {
+    padding: 20px;
+}
+
+.dashboard h1 {
+    margin-bottom: 20px;
+  }
+  
+  .location-cards {
+    display: flex;
+    flex-direction: column; /* Ensure cards are stacked vertically */
+  }

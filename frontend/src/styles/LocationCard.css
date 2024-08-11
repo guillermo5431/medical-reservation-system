@@ -1,0 +1,39 @@
+.location-card {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 16px;
+    width: 600px; /*adjust width as needed */
+}
+
+.location-image {
+    width: 150px; /*adjust as needed both of them */
+    height: 150px;
+    object-fit: cover;
+}
+
+.location-details {
+    padding: 16px;
+    flex: 1;
+}
+
+.location-name {
+    font-size: 1.2em;
+    color: #555;
+    margin: 0 0 16px 0;
+}
+.location-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
