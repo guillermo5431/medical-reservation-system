@@ -1,19 +1,19 @@
 import React from 'react'
 import '../styles/LocationCard.css';
 import '../styles/dashboard.css';
+import office_icon from '../components/Assets/office.png'
 
 const Dashboard = () => {
   return (
     <div className="dashboard">
-        <div className='location-cards'>
-            <img src={image} alt={name} className='location-image' />
-            <div className='location-details'>
+        <div className='location-card'>
+            <img src={office_icon} alt='office_icon' className='location-image' />
+            <div className='location-card-info'>
                 <h3 className='location-name'>nameplaceholder</h3>
                 <p className='location-address'>addressplaceholder</p>
-                <div className='location-actions'>
-                    <button className='btn btn book-appointment'>Book Appointment</button>
-                </div>
+                <p className='location-phone-number'>locationPhoneNumber</p>
             </div>
+            <button className='location-card-button'>Book Appointment</button>
         </div>
 
     </div>

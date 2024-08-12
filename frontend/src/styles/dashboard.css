@@ -1,12 +1,7 @@
 .dashboard {
-    padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* Ensures the content is centered vertically */
 }
-
-.dashboard h1 {
-    margin-bottom: 20px;
-  }
-  
-  .location-cards {
-    display: flex;
-    flex-direction: column; /* Ensure cards are stacked vertically */
-  }

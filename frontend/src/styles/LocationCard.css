@@ -1,39 +1,54 @@
 .location-card {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: 16px;
-    width: 600px; /*adjust width as needed */
+    width: 80%; /*adjust width as needed */
+    max-width: 1230px;
+    background-color: #fff;
 }
 
 .location-image {
-    width: 150px; /*adjust as needed both of them */
-    height: 150px;
+    width: 100px; /*adjust as needed both of them */
+    height: 100px;
     object-fit: cover;
+    border-radius: 8px;
+    margin-right: 0px;
 }
 
-.location-details {
-    padding: 16px;
-    flex: 1;
+.location-card-info {
+        padding: 16px 8px;
+        flex: 1;
 }
 
 .location-name {
     font-size: 1.2em;
-    color: #555;
-    margin: 0 0 16px 0;
-}
-.location-actions {
-    display: flex;
-    gap: 8px;
+    color: #333;
+    margin: 0;
 }
 
-.btn {
-    padding: 8px 16px;
+.location-address, .location-phone-number {
+    margin: 4px 0;
+    color: #666;
+}
+
+
+.location-card-button {
+    background-color: #2c8bff;
+    color: #fff;
     border: none;
-    border-radius: 4px;
+    padding: 10px 20px;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+    align-self: center;
+    margin-right: 20px;
 }
 
+.location-card-button:hover {
+    background-color: #0062cc;
+}
