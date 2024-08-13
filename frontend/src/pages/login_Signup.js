@@ -10,8 +10,8 @@ import address_icon from '../components/Assets/address.png'
 
 
 const LoginSignup = () => {
-
     const [action,setAction] = useState("Login");
+
 
   return (
     <div className='custom-container'>

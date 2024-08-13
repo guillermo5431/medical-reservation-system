@@ -1,9 +1,16 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import '../styles/LocationCard.css';
 import '../styles/dashboard.css';
 import office_icon from '../components/Assets/office.png'
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
+  const handleButtonClick = () => {
+    navigate('/finalizeAppointment'); // redirect to finalize appointment
+  }
+
   return (
     <div className="dashboard">
         <div className='location-card'>
@@ -13,7 +20,11 @@ const Dashboard = () => {
                 <p className='location-address'>addressplaceholder</p>
                 <p className='location-phone-number'>locationPhoneNumber</p>
             </div>
-            <button className='location-card-button'>Book Appointment</button>
+            <button
+             className='location-card-button'
+             onClick={handleButtonClick}>
+              Book Appointment
+            </button>
         </div>
 
     </div>
