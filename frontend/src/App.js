@@ -7,7 +7,7 @@ import LoginSignup from './pages/login_Signup'
 import Appointment from './pages/appointments';
 import Home from './pages/Home';
 import Dashboard from './pages/dashboard';
-import FinalizeAppointment from './pages/finalizeAppointment';
+import ScheduleAppointment from './pages/scheduleAppointment';
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
           <Route path="/appointment" element={<Appointment />} />
           <Route path="/login_Signup" element={<LoginSignup />} />
           <Route path='/dashboard' element={<Dashboard />} />
-          <Route path='/finalizeAppointment' element={<FinalizeAppointment />} />
+          <Route path='/scheduleAppointment' element={<ScheduleAppointment />} />
         </Routes>
     </div>
     </Router>

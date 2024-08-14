@@ -1,9 +1,9 @@
 import React from 'react'
 
-const FinalizeAppointment = () => {
+const ScheduleAppointment = () => {
   return (
     <div>FinalizeAppointment</div>
   )
 }
 
-export default FinalizeAppointment
+export default ScheduleAppointment
