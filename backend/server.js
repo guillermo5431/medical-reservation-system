@@ -28,8 +28,44 @@ app.get('/api/doctors', async (req, res) => {
         console.error('Error fetching doctors:', err);
         res.status(500).send('Error fetching data');
     }
-
 });
+
+// Add POST routes for login and signup
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        //Query to check user in the database
+        const [rows] = await pool.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password]);
+
+        if (rows.length > 0) {
+            res.json({ message: 'Login successful', user: rows[0] });
+        } else {
+            res.status(401).json({ message: 'Invalid email or password' });
+        }
+    } catch (err) {
+        console.error('Error during login', err);
+        res.status(500).send('Error during login');
+    }
+});
+
+app.post('/signup', async (req, res) => {
+    const { name, birthDate, gender, address, phone, email, password } = req.body;
+
+    try {
+        // Query to insert new user into the database
+        const [result] = await pool.query(
+            'INSERT INT0 patient (name, birthDate, gender, address, phone, email, password) VALUES (?, ?, ?, ?, ?, ?)',
+            [name, birthDate, gender, address, phone, email, password]
+        );
+
+        res.json({ message: 'Signup successful', userId: result.insertId });
+    } catch (err) {
+        console.error('Error during signup:', err);
+        res.status(500).send('Error during signup');
+    }
+});
+
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
