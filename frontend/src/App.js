@@ -9,11 +9,18 @@ import Home from './pages/Home';
 import Dashboard from './pages/dashboard';
 import ScheduleAppointment from './pages/scheduleAppointment';
 
+//Set the Authorization header for axios
+axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authToken')}`;
+
+
 function App() {
+  const isAuthenticated = !!localStorage.getItem('authToken')
+
   return (
     <Router>
     <div className="App">
         <Navbar />
+        {!isAuthenticated && <Navbar />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/doctor" element={<Doctor />} />

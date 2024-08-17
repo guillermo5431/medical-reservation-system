@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import '../styles/LoginSignup.css'
 
 import user_icon from '../components/Assets/person.png'
@@ -21,6 +22,8 @@ const LoginSignup = () => {
       email: '',
       password: '',
     });
+
+    const navigate = useNavigate(); //Initialize the useNavigate hook
 
     const handleInputChange = (e) => {
       const {name, value} = e.target;
@@ -71,6 +74,15 @@ const LoginSignup = () => {
       try {
         const response = await axios.post(`http://localhost:3001/${action.toLowerCase()}`, payload);
         alert(`${action} successful!`);
+
+        //Redirect to the dashboard after succesful login
+        if (action === "Login") {
+          const token = response.data.token; // server return the token in this field
+          localStorage.setItem('authToken', token); //Store the token in localStorage
+          localStorage.setItem('userRole', response.data.role); //Store user role if available
+          navigate('/dashboard');
+        }
+
       } catch (error) {
         console.error("There was an error with the request:", error);
         alert("There was an issue with the submission. Please try again.");
@@ -99,7 +111,7 @@ const LoginSignup = () => {
             <div className="input">
               <img src={date_icon} alt="date icon" />
               <input 
-                type="text" 
+                type="date" 
                 placeholder="Birth Date"
                 value = {formData.birthDate}
                 onChange={handleInputChange}

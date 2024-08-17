@@ -1,16 +1,20 @@
 const express = require('express');
 const cors = require('cors');
 const pool = require('./db');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const port = process.env.PORT || 3001;
+
+// Secret key for JWT
+const jwtSecret = 'your_jwt_secret_key';
 
 //Middleware
 app.use(cors());
 app.use(express.json());
 
 // Route to get patient data
-app.get('/api/patients', async (req, res) => {
+app.get('/api/patients', authenticateToken, async (req, res) => {
     try{
         const [rows] = await pool.query('SELECT * FROM patient');
         res.json(rows); // Send data as JSON
@@ -20,7 +24,7 @@ app.get('/api/patients', async (req, res) => {
     }
 });
 
-app.get('/api/doctors', async (req, res) => {
+app.get('/api/doctors', authenticateToken, async (req, res) => {
     try {
         const [rows] = await pool.query('SELECT * FROM doctor');
         res.json(rows); // Send data as JSON
@@ -65,6 +69,20 @@ app.post('/signup', async (req, res) => {
         res.status(500).send('Error during signup');
     }
 });
+
+//Middleware to authenticate token
+function authenticateToken(req, res, next){
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (token == null) return res.sendStatus(401);
+
+    jwt.verify(token, jwtSecret, (err, user) => {
+        if (err) return res.sendStatus(403);
+        req.user = user;
+        next();
+    })
+}
 
 
 app.listen(port, () => {
