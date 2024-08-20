@@ -7,7 +7,7 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 // Secret key for JWT
-const jwtSecret = 'your_jwt_secret_key';
+const jwtSecret = process.env.JWT_SECRET || 'your_jwt_secret_key';
 
 //Middleware
 app.use(cors());
@@ -40,7 +40,7 @@ app.post('/login', async (req, res) => {
 
     try {
         //Query to check user in the database
-        const [rows] = await pool.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password]);
+        const [rows] = await pool.query('SELECT * FROM patient WHERE email = ? AND password = ?', [email, password]);
 
         if (rows.length > 0) {
             res.json({ message: 'Login successful', user: rows[0] });
@@ -59,7 +59,7 @@ app.post('/signup', async (req, res) => {
     try {
         // Query to insert new user into the database
         const [result] = await pool.query(
-            'INSERT INT0 patient (name, birthDate, gender, address, phone, email, password) VALUES (?, ?, ?, ?, ?, ?)',
+            'INSERT INT0 patient (name, birthDate, gender, address, phone, email, password) VALUES (?, ?, ?, ?, ?, ?, ?)',
             [name, birthDate, gender, address, phone, email, password]
         );
 

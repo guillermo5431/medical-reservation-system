@@ -31,12 +31,12 @@ const LoginSignup = () => {
     };
 
     const validateEmail = (email) => {
-      const emailRegex = /^[\s@]+@[^\s@]+\.[^\s@]+$/
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return emailRegex.test(email);
     }
 
     const validatePassword = (password) => {
-      return password.lenght >= 6;
+      return password.length >= 6;
     }
 
     const handleSubmit = async () => {
@@ -62,7 +62,7 @@ const LoginSignup = () => {
       }
 
       const payload = { email, password };
-      if (action === "Sign up") {
+      if (action === "Sign Up") {
         payload.name = name;
         payload.birthDate = birthDate;
         payload.gender = gender;
@@ -97,12 +97,13 @@ const LoginSignup = () => {
       <div className='underline'></div>
     </div>
     <div className="inputs">
-    {action !== "Login" && (
+      {action !== "Login" && (
           <>
             <div className="input">
               <img src={user_icon} alt="user icon" />
               <input 
                 type="text"
+                name='name'
                 placeholder="Name"
                 value = {formData.name}
                 onChange={handleInputChange}
@@ -112,6 +113,7 @@ const LoginSignup = () => {
               <img src={date_icon} alt="date icon" />
               <input 
                 type="date" 
+                name='birthDate'
                 placeholder="Birth Date"
                 value = {formData.birthDate}
                 onChange={handleInputChange}
@@ -121,6 +123,7 @@ const LoginSignup = () => {
               <img src={gender_icon} alt="gender icon" />
               <input 
                 type="text" 
+                name='Gender'
                 placeholder="Gender"
                 value = {formData.gender}
                 onChange={handleInputChange}
@@ -130,6 +133,7 @@ const LoginSignup = () => {
               <img src={address_icon} alt="address icon" />
               <input 
                 type="text" 
+                name='address'
                 placeholder="Address"
                 value = {formData.address}
                 onChange={handleInputChange}
@@ -139,6 +143,7 @@ const LoginSignup = () => {
               <img src={phone_icon} alt="phone icon" />
               <input 
                 type="text" 
+                name='phone'
                 placeholder="Phone"
                 value = {formData.phone}
                 onChange={handleInputChange}
@@ -150,6 +155,7 @@ const LoginSignup = () => {
         <img src={email_icon} alt=""/>
         <input 
           type="email" 
+          name='email'
           placeholder="Email" 
           value = {formData.email}
           onChange={handleInputChange}
@@ -159,6 +165,7 @@ const LoginSignup = () => {
         <img src={password_icon} alt=""/>
         <input 
           type="password" 
+          name='password'
           placeholder="Password"
           value={formData.password}
           onChange={handleInputChange}

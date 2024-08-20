@@ -1,6 +1,7 @@
 import './App.css';
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
+import axios from 'axios';
 import Navbar from './components/Navbar/index';
 import Doctor from './pages/doctor';
 import LoginSignup from './pages/login_Signup'
@@ -8,6 +9,9 @@ import Appointment from './pages/appointments';
 import Home from './pages/Home';
 import Dashboard from './pages/dashboard';
 import ScheduleAppointment from './pages/scheduleAppointment';
+import About from './pages/about';
+import MyAppointments from './pages/MyAppointments';
+import MyPatients from './pages/MyPatients';
 
 //Set the Authorization header for axios
 axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authToken')}`;
@@ -15,12 +19,12 @@ axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem(
 
 function App() {
   const isAuthenticated = !!localStorage.getItem('authToken')
+  const userRole = isAuthenticated ? localStorage.getItem('userRole'): 'guest';
 
   return (
     <Router>
     <div className="App">
-        <Navbar />
-        {!isAuthenticated && <Navbar />}
+        <Navbar userRole={userRole} /> {/* Pass userRole as a prop*/ }
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/doctor" element={<Doctor />} />
@@ -28,6 +32,9 @@ function App() {
           <Route path="/login_Signup" element={<LoginSignup />} />
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/scheduleAppointment' element={<ScheduleAppointment />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/myAppointments' element={<MyAppointments />} />
+          <Route path='/myPatients' element={<MyPatients />} />
         </Routes>
     </div>
     </Router>

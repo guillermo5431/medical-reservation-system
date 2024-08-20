@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown'
+
 
 function index({ userRole }) {
   const handleLogout = () => {
@@ -43,7 +43,7 @@ function index({ userRole }) {
        {userRole === 'guest' && (
         <>
         <Nav.Link as={Link} to="/about">About Us</Nav.Link>
-        <Nav.Link as={Link} to="/appointments">Doctors</Nav.Link>
+        <Nav.Link as={Link} to="/appointments">Appointments</Nav.Link>
         <Nav.Link as={Link} to="/contact">Contact Us</Nav.Link>
         </>
        )}
