@@ -1,7 +1,7 @@
 import './App.css';
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
-import axios from 'axios';
+
 import Navbar from './components/Navbar/index';
 import Doctor from './pages/doctor';
 import LoginSignup from './pages/login_Signup'
@@ -13,13 +13,15 @@ import About from './pages/about';
 import MyAppointments from './pages/MyAppointments';
 import MyPatients from './pages/MyPatients';
 
-//Set the Authorization header for axios
-axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authToken')}`;
-
-
 function App() {
-  const isAuthenticated = !!localStorage.getItem('authToken')
-  const userRole = isAuthenticated ? localStorage.getItem('userRole'): 'guest';
+
+  const [isAuthenticated, setIsAuthenticated] = React.useState(!!localStorage.getItem('authToken'));
+
+  React.useEffect(() => {
+    setIsAuthenticated(!!localStorage.getItem('authToken'));
+  }, []);
+
+  const userRole = isAuthenticated ? localStorage.getItem('userRole') : 'guest';
 
   return (
     <Router>

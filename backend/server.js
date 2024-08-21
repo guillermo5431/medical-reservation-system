@@ -43,7 +43,9 @@ app.post('/login', async (req, res) => {
         const [rows] = await pool.query('SELECT * FROM patient WHERE email = ? AND password = ?', [email, password]);
 
         if (rows.length > 0) {
-            res.json({ message: 'Login successful', user: rows[0] });
+            //Creates a JWT token upon success
+            const token = jwt.sign({ id: rows[0].id, role: 'patient'}, jwtSecret, {expiresIn: '1h'});
+            res.json({ message: 'Login successful', token, userRole: 'patient' });
         } else {
             res.status(401).json({ message: 'Invalid email or password' });
         }
