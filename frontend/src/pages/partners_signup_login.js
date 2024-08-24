@@ -12,16 +12,16 @@ import address_icon from '../components/Assets/address.png'
 import phone_icon from '../components/Assets/phone.png'
 
 
-const LoginSignup = () => {
+const PartnersLoginSignup = () => {
     const [action,setAction] = useState("Login");
     const [formData, setFormData] = useState({
       name: '',
-      birthDate: '',
-      gender: '',
-      address: '',
-      phone: '',
       email: '',
+      phone: '',
+      desiredLocation: '',
+      speciality: '',
       password: '',
+      role: 'admin', // Default role
     });
 
     const navigate = useNavigate(); //Initialize the useNavigate hook
@@ -41,15 +41,16 @@ const LoginSignup = () => {
     }
 
     const handleSubmit = async () => {
-      const { name, birthDate, gender, address, phone, email, password} = formData;
+      const { name, email, phone, desiredLocation, specialty, password, role} = formData;
 
-      if (action === "Sign Up" && (!name || !birthDate || !gender || !address || ! phone || !email || !password)) {
+      if (action === "Sign Up" && (!name || !email || !phone || !password || (role === 'doctor' && !specialty) || !desiredLocation)) {
         alert("Please fill in all fields")
         return;
       }
 
       if (action === "Login" && (!email || !password)) {
         alert("Please fill in all fields.")
+        return;
       }
 
       if (!validateEmail(email)) {
@@ -62,14 +63,9 @@ const LoginSignup = () => {
         return;
       }
 
-      const payload = { email, password };
-      if (action === "Sign Up") {
-        payload.name = name;
-        payload.birthDate = birthDate;
-        payload.gender = gender;
-        payload.address = address;
-        payload.phone = phone;
-
+      const payload = { name, email, phone, desiredLocation, role, password};
+      if (role === 'doctor') {
+        payload.specialty = specialty
       }
 
       try {
@@ -112,36 +108,6 @@ const LoginSignup = () => {
                 />
             </div>
             <div className="input">
-              <img src={date_icon} alt="date icon" />
-              <input 
-                type="date" 
-                name='birthDate'
-                placeholder="Birth Date"
-                value = {formData.birthDate}
-                onChange={handleInputChange}
-                />
-            </div>
-            <div className="input">
-              <img src={gender_icon} alt="gender icon" />
-              <input 
-                type="text" 
-                name='gender'
-                placeholder="Gender"
-                value = {formData.gender}
-                onChange={handleInputChange}
-                />
-            </div>
-            <div className="input">
-              <img src={address_icon} alt="address icon" />
-              <input 
-                type="text" 
-                name='address'
-                placeholder="Address"
-                value = {formData.address}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="input">
               <img src={phone_icon} alt="phone icon" />
               <input 
                 type="text" 
@@ -150,6 +116,39 @@ const LoginSignup = () => {
                 value = {formData.phone}
                 onChange={handleInputChange}
               />
+            </div>
+            <div className="input">
+              <img src={address_icon} alt="address icon" />
+              <input 
+                type="text" 
+                name='desiredLocation'
+                placeholder="Desired Location"
+                value = {formData.desiredLocation}
+                onChange={handleInputChange}
+              />
+            </div>
+            {formData.role === 'doctor' && (
+            <div className="input">
+              <img src={specialty_icon} alt="specialty icon" />
+              <input 
+                type="text" 
+                name='specialty'
+                placeholder="Specialty"
+                value = {formData.specialty}
+                onChange={handleInputChange}
+                />
+            </div>
+            )}
+            <div className="input">
+                <label>Role:</label>
+                <select 
+                    name='role'
+                    value={formData.role}
+                    onChange={handleInputChange}
+                >
+                    <option value='admin'>Admin</option>
+                    <option value='doctor'>Doctor</option>
+                </select>
             </div>
           </>
         )}
@@ -202,4 +201,4 @@ const LoginSignup = () => {
   )
 }
 
-export default LoginSignup
+export default PartnersLoginSignup

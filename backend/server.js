@@ -2,6 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const pool = require('./db');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -56,21 +60,49 @@ app.post('/login', async (req, res) => {
 });
 
 app.post('/signup', async (req, res) => {
-    const { name, birthDate, gender, address, phone, email, password } = req.body;
+    const { username, password, email, phone_number, role, name, address, office_id, speciality, primary_physician_id, birth_date } = req.body;
+
+    // Input validation 
+    if(!username || !password || !email || !role || !name) {
+        return res.status(400).json({ message: 'Please provide all required fields.'});
+    }
 
     try {
-        // Query to insert new user into the database
-        const [result] = await pool.query(
-            'INSERT INT0 patient (name, birthDate, gender, address, phone, email, password) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [name, birthDate, gender, address, phone, email, password]
-        );
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-        res.json({ message: 'Signup successful', userId: result.insertId });
-    } catch (err) {
-        console.error('Error during signup:', err);
-        res.status(500).send('Error during signup');
-    }
-});
+        // SQL query to insert a new user 
+        const [userResult] = await pool.query (
+            'Insert INTO user (username, password, email, phone_number, role) VALUES (?, ?, ?, ?, ?)',
+            [username, hashedPassword, email, phone_number, role]
+        );
+        const user_id = userResult.insertId;
+
+
+        //Insert into role-specific table
+        if (role === 'admin') {
+            await pool.query(
+                `INSERT INTO admin (user_id, office_id, name) VALUES (?, ?, ?)`,
+                [user_id, office_id, name]
+            );
+        } else if (role === 'doctor') {
+            await pool.query(
+                `INSERT INTO doctor (user_id, office_id, speciality, name) VALUES (?, ?, ?, ?)`,
+                [user_id, office_id, speciality, name]
+            );
+        } else if (role === 'patient') {
+            await pool.query(
+                `INSERT INTO patient (user_id, primary_physician_id, name, birth_date) VALUES (?, ?, ?, ?)`,
+                [user_id, primary_physician_id, name, birth_date]
+            );
+        }
+
+        res.status(201).json({ message: "User registered successfully"});
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: "Database error while registering user "});
+        }
+    });
 
 //Middleware to authenticate token
 function authenticateToken(req, res, next){
