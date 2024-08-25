@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 
 import Navbar from './components/Navbar/index';
 import Doctor from './pages/doctor';
-import LoginSignup from './pages/login_Signup'
+import LoginSignup from './pages/login_Signup';
 import Appointment from './pages/appointments';
 import Home from './pages/Home';
 import Dashboard from './pages/dashboard';
@@ -12,6 +12,7 @@ import ScheduleAppointment from './pages/scheduleAppointment';
 import About from './pages/about';
 import MyAppointments from './pages/MyAppointments';
 import MyPatients from './pages/MyPatients';
+import PartnersLoginSignup from './pages/partners_signup_login';
 
 function App() {
 
@@ -37,6 +38,7 @@ function App() {
           <Route path='/about' element={<About />} />
           <Route path='/myAppointments' element={<MyAppointments />} />
           <Route path='/myPatients' element={<MyPatients />} />
+          <Route path='/PartnersLoginSignup' element={<PartnersLoginSignup />} />
         </Routes>
     </div>
     </Router>

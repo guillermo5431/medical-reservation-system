@@ -226,13 +226,11 @@ DROP TABLE IF EXISTS `user`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
   `user_id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) NOT NULL,
-  `passsword` varchar(45) NOT NULL,
   `email` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `phone_number` varchar(20) DEFAULT NULL,
   `role` enum('admin','doctor','patient') NOT NULL,
   PRIMARY KEY (`user_id`),
-  UNIQUE KEY `username_UNIQUE` (`username`),
   UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -255,4 +253,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-24 13:52:30
+-- Dump completed on 2024-08-24 18:51:35

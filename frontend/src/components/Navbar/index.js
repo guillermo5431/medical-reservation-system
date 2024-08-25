@@ -45,6 +45,7 @@ function index({ userRole }) {
         <Nav.Link as={Link} to="/about">About Us</Nav.Link>
         <Nav.Link as={Link} to="/appointments">Appointments</Nav.Link>
         <Nav.Link as={Link} to="/contact">Contact Us</Nav.Link>
+        <Nav.Link as={Link} to="/PartnersLoginSignup">Partner Login/Signup</Nav.Link>
         </>
        )}
       </Nav>

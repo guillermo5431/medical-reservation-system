@@ -22,6 +22,7 @@ const LoginSignup = () => {
       phone: '',
       email: '',
       password: '',
+      role: 'patient', //defaul role set to patient
     });
 
     const navigate = useNavigate(); //Initialize the useNavigate hook
@@ -62,7 +63,7 @@ const LoginSignup = () => {
         return;
       }
 
-      const payload = { email, password };
+      const payload = { email, password, role: formData.role};
       if (action === "Sign Up") {
         payload.name = name;
         payload.birthDate = birthDate;
@@ -73,7 +74,8 @@ const LoginSignup = () => {
       }
 
       try {
-        const response = await axios.post(`http://localhost:3001/${action.toLowerCase()}`, payload);
+        const endpoint = `http://localhost:3001/patient/${action.toLowerCase().replace(' ','')}`;
+        const response = await axios.post(endpoint, payload);
         alert(`${action} successful!`);
 
         //Redirect to the dashboard after succesful login

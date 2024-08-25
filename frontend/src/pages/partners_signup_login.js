@@ -6,10 +6,9 @@ import '../styles/LoginSignup.css'
 import user_icon from '../components/Assets/person.png'
 import email_icon from '../components/Assets/email.png'
 import password_icon from '../components/Assets/password.png'
-import date_icon from '../components/Assets/date.png'
-import gender_icon from '../components/Assets/gender.png'
 import address_icon from '../components/Assets/address.png'
 import phone_icon from '../components/Assets/phone.png'
+import specialty_icon from '../components/Assets/specialty.png'
 
 
 const PartnersLoginSignup = () => {
@@ -63,13 +62,22 @@ const PartnersLoginSignup = () => {
         return;
       }
 
-      const payload = { name, email, phone, desiredLocation, role, password};
-      if (role === 'doctor') {
-        payload.specialty = specialty
+      const payload = { email, password };
+      
+      if (action === "Sign Up") {
+        payload.name = name;
+        payload.phone = phone;
+        payload.desiredLocation = desiredLocation;
+        payload.role = role;
+        if (role === 'doctor') {
+          payload.specialty = specialty;
+        }
       }
 
       try {
-        const response = await axios.post(`http://localhost:3001/${action.toLowerCase()}`, payload);
+        const endpoint = `http://localhost:3001/partner/${action.toLowerCase().replace(' ','')}`;
+        const response = await axios.post(endpoint, payload);
+
         alert(`${action} successful!`);
 
         //Redirect to the dashboard after succesful login
