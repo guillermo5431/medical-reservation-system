@@ -36,15 +36,6 @@ CREATE TABLE `admin` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `admin`
---
-
-LOCK TABLES `admin` WRITE;
-/*!40000 ALTER TABLE `admin` DISABLE KEYS */;
-/*!40000 ALTER TABLE `admin` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `appointment`
 --
 
@@ -71,15 +62,6 @@ CREATE TABLE `appointment` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `appointment`
---
-
-LOCK TABLES `appointment` WRITE;
-/*!40000 ALTER TABLE `appointment` DISABLE KEYS */;
-/*!40000 ALTER TABLE `appointment` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `appointment_status`
 --
 
@@ -92,15 +74,6 @@ CREATE TABLE `appointment_status` (
   PRIMARY KEY (`idappointment_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `appointment_status`
---
-
-LOCK TABLES `appointment_status` WRITE;
-/*!40000 ALTER TABLE `appointment_status` DISABLE KEYS */;
-/*!40000 ALTER TABLE `appointment_status` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `doctor`
@@ -124,15 +97,6 @@ CREATE TABLE `doctor` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `doctor`
---
-
-LOCK TABLES `doctor` WRITE;
-/*!40000 ALTER TABLE `doctor` DISABLE KEYS */;
-/*!40000 ALTER TABLE `doctor` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `office`
 --
 
@@ -150,15 +114,6 @@ CREATE TABLE `office` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `office`
---
-
-LOCK TABLES `office` WRITE;
-/*!40000 ALTER TABLE `office` DISABLE KEYS */;
-/*!40000 ALTER TABLE `office` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `patient`
 --
 
@@ -172,6 +127,7 @@ CREATE TABLE `patient` (
   `name` varchar(50) DEFAULT NULL,
   `birth_date` date DEFAULT NULL,
   `address` varchar(50) DEFAULT NULL,
+  `gender` varchar(7) DEFAULT NULL,
   PRIMARY KEY (`patient_id`),
   KEY `patient_user_id_idx` (`user_id`),
   KEY `patient_doctor_id_idx` (`primary_physician_id`),
@@ -179,15 +135,6 @@ CREATE TABLE `patient` (
   CONSTRAINT `patient_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `patient`
---
-
-LOCK TABLES `patient` WRITE;
-/*!40000 ALTER TABLE `patient` DISABLE KEYS */;
-/*!40000 ALTER TABLE `patient` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `patientspecialistapproval`
@@ -209,15 +156,6 @@ CREATE TABLE `patientspecialistapproval` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `patientspecialistapproval`
---
-
-LOCK TABLES `patientspecialistapproval` WRITE;
-/*!40000 ALTER TABLE `patientspecialistapproval` DISABLE KEYS */;
-/*!40000 ALTER TABLE `patientspecialistapproval` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `user`
 --
 
@@ -232,17 +170,8 @@ CREATE TABLE `user` (
   `role` enum('admin','doctor','patient') NOT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user`
---
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -253,4 +182,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-24 18:51:35
+-- Dump completed on 2024-08-26  7:38:35
