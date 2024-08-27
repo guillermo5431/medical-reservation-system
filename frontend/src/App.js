@@ -4,15 +4,15 @@ import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 
 import Navbar from './components/Navbar/index';
 import Doctor from './pages/doctor';
-import LoginSignup from './pages/login_Signup';
-import Appointment from './pages/appointments';
+import LoginSignup from './pages/Auth/login_Signup';
+import Appointment from './pages/Appointments/appointmentsGuest';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard/dashboard';
 import ScheduleAppointment from './pages/Appointments/scheduleAppointment';
 import About from './pages/about';
 import appointmentList from './pages/Appointments/appointmentList';
 import MyPatients from './pages/MyPatients';
-import PartnersLoginSignup from './pages/partners_signup_login';
+import PartnersLoginSignup from './pages/Auth/partners_signup_login';
 
 function App() {
 

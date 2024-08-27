@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../styles/PartnersLoginSignup.css'
+import '../../styles/PartnersLoginSignup.css'
 
-import user_icon from '../components/Assets/person.png'
-import email_icon from '../components/Assets/email.png'
-import password_icon from '../components/Assets/password.png'
-import address_icon from '../components/Assets/address.png'
-import phone_icon from '../components/Assets/phone.png'
-import specialty_icon from '../components/Assets/specialty.png'
+import user_icon from '../../components/Assets/person.png'
+import email_icon from '../../components/Assets/email.png'
+import password_icon from '../../components/Assets/password.png'
+import address_icon from '../../components/Assets/address.png'
+import phone_icon from '../../components/Assets/phone.png'
+import specialty_icon from '../../components/Assets/specialty.png'
 
 
 const PartnersLoginSignup = () => {
@@ -24,12 +24,21 @@ const PartnersLoginSignup = () => {
     });
 
     const [offices, setOffices] = useState([]);
+    const [cities, setCities] = useState([]);
+    const [states, setStates] = useState([]);
+    const [selectedCity, setSelectedCity] = useState('');
+    const [selectedState, setSelectedState] = useState('');
+
 
     useEffect(() => {
       const fetchOffices = async () => {
         try {
-            const response = await axios.get('http//localhost:3001/offices');
+            const response = await axios.get('http://localhost:3001/offices');
             setOffices(response.data);
+            const uniqueCities = [...new Set(response.data.map(office => office.city))];
+            const uniqueStates = [...new Set(response.data.map(office => office.state))];
+            setCities(uniqueCities);
+            setStates(uniqueStates);
         } catch (error) {
             console.error('Error fetchin offices:', error);
         }
@@ -45,6 +54,16 @@ const PartnersLoginSignup = () => {
     const handleInputChange = (e) => {
       const {name, value} = e.target;
       setFormData({ ...formData, [name]: value});
+    };
+
+    const handleCityChange = (e) => {
+      setSelectedCity(e.target.value);
+      setFormData({ ...formData, desiredLocation: '' });
+    };
+
+    const handleStateChange = (e) => {
+      setSelectedState(e.target.value);
+      setFormData({ ...formData, desiredLocation: '' });
     };
 
     const validateEmail = (email) => {
@@ -142,6 +161,26 @@ const PartnersLoginSignup = () => {
                 onChange={handleInputChange}
               />
             </div>
+            <div className='input'>
+                <label>State:</label>
+                <select name="state" value={selectedState} onChange={handleStateChange}>
+                  <option value ="">Select State</option>
+                  {states.map(state => (
+                    <option key={state} value={state}>{state}</option>
+                  ))}
+                </select>
+            </div>
+            <div className='input'>
+                <label>City:</label>
+                <select name="city" value={selectedCity} onChange={handleCityChange}>
+                <option value="">Select City</option>
+                {offices
+                    .filter(office => office.state === selectedState)
+                    .map(office => (
+                        <option key={office.city} value={office.city}>{office.city}</option>
+                    ))}
+                </select>
+            </div>
             <div className="input">
               <select
                 type="text" 
@@ -150,10 +189,12 @@ const PartnersLoginSignup = () => {
                 onChange={handleInputChange}
               >
                 <option value="">Select Location</option>
-                {offices.map (office => (
-                  <option key={office.office_id} value={office.office_id}>
-                    {office.address}
-                  </option>
+                {offices
+                  .filter(office => office.city === selectedCity && office.state === selectedState)
+                  .map(office =>(
+                      <option key = {office.office_id} value={office.office_id}>
+                        {office.address}
+                      </option>
                 ))}
               </select>
             </div>
