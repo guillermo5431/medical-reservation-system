@@ -6,7 +6,7 @@ import '../../styles/PartnersLoginSignup.css'
 import user_icon from '../../components/Assets/person.png'
 import email_icon from '../../components/Assets/email.png'
 import password_icon from '../../components/Assets/password.png'
-import address_icon from '../../components/Assets/address.png'
+//import address_icon from '../../components/Assets/address.png'
 import phone_icon from '../../components/Assets/phone.png'
 import specialty_icon from '../../components/Assets/specialty.png'
 
@@ -18,7 +18,7 @@ const PartnersLoginSignup = () => {
       email: '',
       phone: '',
       desiredLocation: '',
-      speciality: '',
+      specialty: '',
       password: '',
       role: 'admin', // Default role
     });
@@ -34,11 +34,15 @@ const PartnersLoginSignup = () => {
       const fetchOffices = async () => {
         try {
             const response = await axios.get('http://localhost:3001/offices');
-            setOffices(response.data);
-            const uniqueCities = [...new Set(response.data.map(office => office.city))];
-            const uniqueStates = [...new Set(response.data.map(office => office.state))];
-            setCities(uniqueCities);
-            setStates(uniqueStates);
+            const offices = response.data;
+
+            // Extract cities and states
+            const cities = [...new Set(response.data.map(office => office.city))];
+            const states = [...new Set(response.data.map(office => office.state))];
+
+            setOffices(offices);
+            setCities(cities);
+            setStates(states);
         } catch (error) {
             console.error('Error fetchin offices:', error);
         }
@@ -163,37 +167,33 @@ const PartnersLoginSignup = () => {
             </div>
             <div className='input'>
                 <label>State:</label>
-                <select name="state" value={selectedState} onChange={handleStateChange}>
+                <select value={selectedState} onChange={handleStateChange}>
                   <option value ="">Select State</option>
-                  {states.map(state => (
-                    <option key={state} value={state}>{state}</option>
+                  {states.map((state, index) => (
+                    <option key={index} value={state}>{state}</option>
                   ))}
                 </select>
             </div>
             <div className='input'>
                 <label>City:</label>
-                <select name="city" value={selectedCity} onChange={handleCityChange}>
+                <select value={selectedCity} onChange={handleCityChange}>
                 <option value="">Select City</option>
-                {offices
-                    .filter(office => office.state === selectedState)
-                    .map(office => (
-                        <option key={office.city} value={office.city}>{office.city}</option>
+                {cities.filter(city => offices.some(office => office.state === selectedState && office.city === city)).map((city, index)=> (
+                        <option key={index} value={city}>{city}</option>
                     ))}
                 </select>
             </div>
             <div className="input">
               <select
-                type="text" 
                 name='desiredLocation'
                 value = {formData.desiredLocation}
                 onChange={handleInputChange}
+                disabled={!selectedCity || !selectedState}
               >
                 <option value="">Select Location</option>
-                {offices
-                  .filter(office => office.city === selectedCity && office.state === selectedState)
-                  .map(office =>(
+                {offices.filter(office => office.city === selectedCity && office.state === selectedState).map((office) =>(
                       <option key = {office.office_id} value={office.office_id}>
-                        {office.address}
+                        {`${office.address}`}
                       </option>
                 ))}
               </select>

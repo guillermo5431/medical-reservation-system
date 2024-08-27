@@ -34,16 +34,9 @@ app.post('/partner/login', async (req, res) => {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        // Determine the role to set userRole accordingly
-        const [roleResult] = await pool.query(
-            'SELECT role FROM user WHERE id = ?',
-            [user.id]
-        );
-        const role = roleResult[0].role;
-
         // Create JWT token
-        const token = jwt.sign({ id: user.id, role }, jwSecret, { expiresIn: '1h'});
-        res.json({ message: 'Login successful', token, userRole: role });
+        const token = jwt.sign({ id: user.id, role: user.role }, jwtSecret, { expiresIn: '1h'});
+        res.json({ message: 'Login successful', token, userRole: user.role });
     } catch (err) {
         console.error('Error during partner login', err);
         res.status(500).send('Error during login');
@@ -79,7 +72,7 @@ app.post('/partner/signup', async (req, res) => {
         } else if (role === 'doctor') {
             await pool.query(
                 'INSERT INTO doctor (user_id, office_id, specialty, name) VALUES (?, ?, ?, ?)',
-                [user_id, desiredLocation, name]
+                [user_id, desiredLocation, specialty, name]
             );
         }
 
@@ -92,7 +85,7 @@ app.post('/partner/signup', async (req, res) => {
 
 app.get('/offices', async (req, res) => {
     try {
-        const [offices] = await pool.query('SELECT office_id, address from office');
+        const [offices] = await pool.query('SELECT office_id, address, city, state from office');
         res.json(offices);
     } catch (err) {
         console.error('Error fetching offices:', err);
