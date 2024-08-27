@@ -86,7 +86,7 @@ CREATE TABLE `doctor` (
   `doctor_id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `office_id` int NOT NULL,
-  `speciality` varchar(30) DEFAULT NULL,
+  `specialty` varchar(30) DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`doctor_id`),
   KEY `doctor_user_id_idx` (`user_id`),
@@ -110,7 +110,7 @@ CREATE TABLE `office` (
   `state` varchar(2) DEFAULT NULL,
   `phone_number` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`office_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -170,7 +170,7 @@ CREATE TABLE `user` (
   `role` enum('admin','doctor','patient') NOT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -182,4 +182,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-26  7:38:35
+-- Dump completed on 2024-08-27 18:06:47

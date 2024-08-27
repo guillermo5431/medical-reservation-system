@@ -13,6 +13,28 @@ const jwtSecret = process.env.JWT_SECRET || 'your_jwt_secret_key';
 //Middleware
 app.use(cors());
 app.use(express.json());
+app.use(helmet()); // adds security headers to all responses
+
+// Rate limiter for login routes
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 10, // Limit each IP to 10 login requests per windowMs
+    message: 'Too many login attempts from this IP, please try again after 15 minutes.'
+});
+
+// JWT Verification Middleware
+const verifyJWT = (req, res, next) => {
+    const token = req.header('Authorization').split(' ')[1];
+    if (!token) return res.status(401).json({ message: 'Access Denied' });
+
+    try {
+        const verified = jwt.verify(token, jwtSecret);
+        req.user = verified;
+        next();
+    } catch (err) {
+        res.status(400).json({ message: 'Invalid Token' });
+    }
+}
 
 app.post('/partner/login', async (req, res) => {
     const {email, password } = req.body;
@@ -52,12 +74,17 @@ app.post('/partner/signup', async (req, res) => {
         return res.status(400).json({ message: 'Please provide all required fields.'});
     }
 
+    // Start a transaction
+    const connection = await pool.getConnection(); 
+
     try {
+        await connection.beginTransaction(); // Begin the transaction
+
         // Hash the password 
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // SQL query to insert a new user
-        const [userResult] = await pool.query(
+        const [userResult] = await connection.query(
             'INSERT INTO user (email, password, phone_number, role) VALUES (?, ?, ?, ?)',
             [email, hashedPassword, phone, role]
         );
@@ -65,21 +92,26 @@ app.post('/partner/signup', async (req, res) => {
 
         // Insert into role-specific table 
         if (role === 'admin') {
-            await pool.query(
+            await connection.query(
                 'INSERT INTO admin (user_id, office_id, name) VALUES (?, ?, ?)',
                 [user_id, desiredLocation, name]
             )
         } else if (role === 'doctor') {
-            await pool.query(
+            await connection.query(
                 'INSERT INTO doctor (user_id, office_id, specialty, name) VALUES (?, ?, ?, ?)',
                 [user_id, desiredLocation, specialty, name]
             );
         }
 
+        await connection.commit(); // Commit the transaction if everything is successful
+
         res.status(201).json({ message: 'Partner registered successfully' });
     } catch (err) {
+        await connection.rollback(); // Rollback the transaction in case of any error
         console.error('Error during partneer sign-up', err);
         res.status(500).json({ error: 'Database error while registering partner' })
+    } finally {
+        connection.release(); // 
     }
 });
 
@@ -137,113 +169,40 @@ app.post('/patient/signup', async (req, res) => {
     if (!name || !birthDate || !gender || !address || !phone || !email || !password) {
         return res.status(400).json({ message: 'Please provide all required fields.'});
     }
+
+    // Start a transaction
+    const connection = await pool.getConnection(); // Get a connection from the pool
     
     try {
+        await connection.beginTransaction(); // Begin the transaction
+        
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
         // SQL query to insert a new user
-        const [userResult] = await pool.query(
+        const [userResult] = await connection.query(
             'INSERT INTO user (email, password, phone_number, role) VALUES (?, ?, ?, ?)', 
             [email, hashedPassword, phone, 'patient']
         );
         const user_id = userResult.insertId;
 
         // Insert into patient-specific table
-        await pool.query(
+        await connection.query(
             'INSERT INTO patient (user_id, name, birth_date, gender, address) VALUES (?, ?, ?, ?, ?)',
             [user_id, name, birthDate, gender, address]
         );
 
+        await connection.commit(); // Commit the transaction if everything is successful
+
         res.status(201).json({ message: 'Patient registered successfully' });
     } catch (err) {
+        await connection.rollback(); // Rollback the transaction in case of any error
         console.error('Error during patient sign-up', err);
         res.status(500).json({ error: 'Database error while registering patient'});
+    } finally {
+        connection.release(); // Release the connection back to the pool
     }
 
 });
-
-/*
-
-// Add POST routes for login and signup
-app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-
-    try {
-        //Query to check user in the database
-        const [rows] = await pool.query('SELECT * FROM patient WHERE email = ? AND password = ?', [email, password]);
-
-        if (rows.length > 0) {
-            //Creates a JWT token upon success
-            const token = jwt.sign({ id: rows[0].id, role: 'patient'}, jwtSecret, {expiresIn: '1h'});
-            res.json({ message: 'Login successful', token, userRole: 'patient' });
-        } else {
-            res.status(401).json({ message: 'Invalid email or password' });
-        }
-    } catch (err) {
-        console.error('Error during login', err);
-        res.status(500).send('Error during login');
-    }
-});
-
-app.post('/signup', async (req, res) => {
-    const { username, password, email, phone_number, role, name, address, office_id, speciality, primary_physician_id, birth_date } = req.body;
-
-    // Input validation 
-    if(!username || !password || !email || !role || !name) {
-        return res.status(400).json({ message: 'Please provide all required fields.'});
-    }
-
-    try {
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // SQL query to insert a new user 
-        const [userResult] = await pool.query (
-            'Insert INTO user (username, password, email, phone_number, role) VALUES (?, ?, ?, ?, ?)',
-            [username, hashedPassword, email, phone_number, role]
-        );
-        const user_id = userResult.insertId;
-
-
-        //Insert into role-specific table
-        if (role === 'admin') {
-            await pool.query(
-                `INSERT INTO admin (user_id, office_id, name) VALUES (?, ?, ?)`,
-                [user_id, office_id, name]
-            );
-        } else if (role === 'doctor') {
-            await pool.query(
-                `INSERT INTO doctor (user_id, office_id, speciality, name) VALUES (?, ?, ?, ?)`,
-                [user_id, office_id, speciality, name]
-            );
-        } else if (role === 'patient') {
-            await pool.query(
-                `INSERT INTO patient (user_id, primary_physician_id, name, birth_date) VALUES (?, ?, ?, ?)`,
-                [user_id, primary_physician_id, name, birth_date]
-            );
-        }
-
-        res.status(201).json({ message: "User registered successfully"});
-        } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: "Database error while registering user "});
-        }
-    });
-
-//Middleware to authenticate token
-function authenticateToken(req, res, next){
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-
-    if (token == null) return res.sendStatus(401);
-
-    jwt.verify(token, jwtSecret, (err, user) => {
-        if (err) return res.sendStatus(403);
-        req.user = user;
-        next();
-    })
-} */
-
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
