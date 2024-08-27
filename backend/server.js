@@ -90,6 +90,16 @@ app.post('/partner/signup', async (req, res) => {
     }
 });
 
+app.get('/offices', async (req, res) => {
+    try {
+        const [offices] = await pool.query('SELECT office_id, address from office');
+        res.json(offices);
+    } catch (err) {
+        console.error('Error fetching offices:', err);
+        res.status(500).json({ message: 'Error fetching offices' });
+    }
+});
+
 //Patient Login
 app.post('/patient/login', async (req,res) => {
     const { email, password } = req.body;

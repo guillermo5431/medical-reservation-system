@@ -7,10 +7,10 @@ import Doctor from './pages/doctor';
 import LoginSignup from './pages/login_Signup';
 import Appointment from './pages/appointments';
 import Home from './pages/Home';
-import Dashboard from './pages/dashboard';
-import ScheduleAppointment from './pages/scheduleAppointment';
+import Dashboard from './pages/Dashboard/dashboard';
+import ScheduleAppointment from './pages/Appointments/scheduleAppointment';
 import About from './pages/about';
-import MyAppointments from './pages/MyAppointments';
+import appointmentList from './pages/Appointments/appointmentList';
 import MyPatients from './pages/MyPatients';
 import PartnersLoginSignup from './pages/partners_signup_login';
 
@@ -31,12 +31,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/doctor" element={<Doctor />} />
-          <Route path="/appointment" element={<Appointment />} />
           <Route path="/login_Signup" element={<LoginSignup />} />
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/scheduleAppointment' element={<ScheduleAppointment />} />
           <Route path='/about' element={<About />} />
-          <Route path='/myAppointments' element={<MyAppointments />} />
+          <Route path='/appointmentList' element={<appointmentList />} />
           <Route path='/myPatients' element={<MyPatients />} />
           <Route path='/PartnersLoginSignup' element={<PartnersLoginSignup />} />
         </Routes>

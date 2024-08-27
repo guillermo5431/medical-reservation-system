@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../styles/LoginSignup.css'
+import '../styles/PartnersLoginSignup.css'
 
 import user_icon from '../components/Assets/person.png'
 import email_icon from '../components/Assets/email.png'
@@ -22,6 +22,23 @@ const PartnersLoginSignup = () => {
       password: '',
       role: 'admin', // Default role
     });
+
+    const [offices, setOffices] = useState([]);
+
+    useEffect(() => {
+      const fetchOffices = async () => {
+        try {
+            const response = await axios.get('http//localhost:3001/offices');
+            setOffices(response.data);
+        } catch (error) {
+            console.error('Error fetchin offices:', error);
+        }
+      };
+
+      fetchOffices();
+    }, []);
+
+
 
     const navigate = useNavigate(); //Initialize the useNavigate hook
 
@@ -99,7 +116,7 @@ const PartnersLoginSignup = () => {
   return (
     <div className='custom-container'>
     <div className="header">
-      <div className="text">{action}</div>
+      <div className="text">{`Partner ${action}`}</div>
       <div className='underline'></div>
     </div>
     <div className="inputs">
@@ -126,14 +143,19 @@ const PartnersLoginSignup = () => {
               />
             </div>
             <div className="input">
-              <img src={address_icon} alt="address icon" />
-              <input 
+              <select
                 type="text" 
                 name='desiredLocation'
-                placeholder="Desired Location"
                 value = {formData.desiredLocation}
                 onChange={handleInputChange}
-              />
+              >
+                <option value="">Select Location</option>
+                {offices.map (office => (
+                  <option key={office.office_id} value={office.office_id}>
+                    {office.address}
+                  </option>
+                ))}
+              </select>
             </div>
             {formData.role === 'doctor' && (
             <div className="input">

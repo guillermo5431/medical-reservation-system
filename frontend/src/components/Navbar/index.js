@@ -21,7 +21,7 @@ function index({ userRole }) {
       <Nav className="me-auto">
        {userRole === 'patient' && (
         <>
-          <Nav.Link as={Link} to="/my-appointments">My Appointments</Nav.Link>
+          <Nav.Link as={Link} to="/appointmentList">My Appointments</Nav.Link>
           <Nav.Link as={Link} to="/doctors">Doctors</Nav.Link>
           <Nav.Link as={Link} to="/medical-records">Medical Records</Nav.Link>
         </>
@@ -29,21 +29,20 @@ function index({ userRole }) {
        {userRole === 'admin' && (
         <>
         <Nav.Link as={Link} to="/manage-users">Manage Users</Nav.Link>
-        <Nav.Link as={Link} to="/appointments">Appointments</Nav.Link>
+        <Nav.Link as={Link} to="/appointmentList">Appointments</Nav.Link>
         <Nav.Link as={Link} to="/reports">Reports</Nav.Link>
         </>
        )}
        {userRole === 'doctor' && (
         <>
         <Nav.Link as={Link} to="/my-patients">My Patients</Nav.Link>
-        <Nav.Link as={Link} to="/appointments">Appointments</Nav.Link>
+        <Nav.Link as={Link} to="/appointmentList">Appointments</Nav.Link>
         <Nav.Link as={Link} to="/medical-records">Medical Records</Nav.Link>
         </>
        )}
        {userRole === 'guest' && (
         <>
         <Nav.Link as={Link} to="/about">About Us</Nav.Link>
-        <Nav.Link as={Link} to="/appointments">Appointments</Nav.Link>
         <Nav.Link as={Link} to="/contact">Contact Us</Nav.Link>
         <Nav.Link as={Link} to="/PartnersLoginSignup">Partner Login/Signup</Nav.Link>
         </>
