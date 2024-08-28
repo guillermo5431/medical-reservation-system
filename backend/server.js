@@ -3,6 +3,8 @@ const cors = require('cors');
 const pool = require('./db');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const rateLimit = require('express-rate-limit'); // Rate limiting middleware
+const helmet = require('helmet'); // Security middleware
 
 const app = express();
 const port = process.env.PORT || 3001;
