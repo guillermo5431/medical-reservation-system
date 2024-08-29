@@ -22,35 +22,40 @@ function index({ userRole }) {
        {userRole === 'patient' && (
         <>
           <Nav.Link as={Link} to="/appointmentList">My Appointments</Nav.Link>
-          <Nav.Link as={Link} to="/doctors">Doctors</Nav.Link>
-          <Nav.Link as={Link} to="/medical-records">Medical Records</Nav.Link>
+          <Nav.Link as={Link} to="/patient/doctors">Doctors</Nav.Link>
+          <Nav.Link as={Link} to="/patient/medical-records">Medical Records</Nav.Link>
+          <Nav.Link as={Link} to="/patient/profile">Profile</Nav.Link>  
         </>
        )}
        {userRole === 'admin' && (
         <>
-        <Nav.Link as={Link} to="/manage-users">Manage Users</Nav.Link>
+        <Nav.Link as={Link} to="/adminDashboard">Dashboard</Nav.Link>
+        <Nav.Link as={Link} to="/admin/patients">Patients</Nav.Link>  
+        <Nav.Link as={Link} to="/admin/doctors">Doctors</Nav.Link> 
+        <Nav.Link as={Link} to="/admin/offices">Offices</Nav.Link>         
         <Nav.Link as={Link} to="/appointmentList">Appointments</Nav.Link>
-        <Nav.Link as={Link} to="/reports">Reports</Nav.Link>
+        <Nav.Link as={Link} to="/admin/reports">Reports</Nav.Link>
         </>
        )}
        {userRole === 'doctor' && (
         <>
-        <Nav.Link as={Link} to="/my-patients">My Patients</Nav.Link>
+        <Nav.Link as={Link} to="/doctorDashboard">Dashboard</Nav.Link>  
+        <Nav.Link as={Link} to="/doctor/patients">My Patients</Nav.Link>
         <Nav.Link as={Link} to="/appointmentList">Appointments</Nav.Link>
-        <Nav.Link as={Link} to="/medical-records">Medical Records</Nav.Link>
+        <Nav.Link as={Link} to="/doctor/profile">Profile</Nav.Link>  
         </>
        )}
        {userRole === 'guest' && (
         <>
         <Nav.Link as={Link} to="/about">About Us</Nav.Link>
         <Nav.Link as={Link} to="/contact">Contact Us</Nav.Link>
-        <Nav.Link as={Link} to="/PartnersLoginSignup">Partner Login/Signup</Nav.Link>
+        <Nav.Link as={Link} to="/partners/login-signup">Partner Login/Signup</Nav.Link>
         </>
        )}
       </Nav>
       <Nav className='justify-content-end'>
        {userRole === 'guest' ? (
-        <Nav.Link as={Link} to="/login_signup">Login/Signup</Nav.Link>
+        <Nav.Link as={Link} to="/patient/login-signup">Login/Signup</Nav.Link>
        ) : (
         <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
        )}
