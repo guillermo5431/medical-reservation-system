@@ -117,16 +117,6 @@ app.post('/partner/signup', async (req, res) => {
     }
 });
 
-app.get('/offices', async (req, res) => {
-    try {
-        const [offices] = await pool.query('SELECT office_id, address, city, state from office');
-        res.json(offices);
-    } catch (err) {
-        console.error('Error fetching offices:', err);
-        res.status(500).json({ message: 'Error fetching offices' });
-    }
-});
-
 //Patient Login
 app.post('/patient/login', async (req,res) => {
     const { email, password } = req.body;
@@ -164,6 +154,7 @@ app.post('/patient/login', async (req,res) => {
     }
 });
 
+// Patient signup
 app.post('/patient/signup', async (req, res) => {
     const {name, birthDate, gender, address, phone, email, password} = req.body;
 
@@ -205,6 +196,29 @@ app.post('/patient/signup', async (req, res) => {
     }
 
 });
+
+// fetching office data
+app.get('/offices', async (req, res) => {
+    try {
+        const [offices] = await pool.query('SELECT office_id, address, city, state from office');
+        res.json(offices);
+    } catch (err) {
+        console.error('Error fetching offices:', err);
+        res.status(500).json({ message: 'Error fetching offices' });
+    }
+});
+
+// fetching appointment data
+app.get('/appointments', verifyJWT, async (req, res) => {
+    try {
+        const [appointments] = await pool.query('SELECT * FROM appointment');
+        res.json(appointments);
+    } catch (err) {
+        console.error('Error fetching appointments:', err);
+        res.status(500).json({ message: 'Error fetching appointments' });
+    }
+});
+
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

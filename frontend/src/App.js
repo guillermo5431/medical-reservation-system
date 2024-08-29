@@ -10,7 +10,7 @@ import AdminOffices from './pages/Admin/offices';
 import AdminPatients from './pages/Admin/patients';
 import AppointmentsGuest from './pages/Appointments/appointmentsGuest';
 import ScheduleAppointment from './pages/Appointments/scheduleAppointment';
-import appointmentList from './pages/Appointments/appointmentList';
+import AppointmentList from './pages/Appointments/appointmentList';
 import PatientLoginSignup from './pages/Auth/login_Signup';
 import PartnersLoginSignup from './pages/Auth/partners_signup_login';
 import AdminDashboard from './pages/Dashboard/adminDashboard';
@@ -22,7 +22,6 @@ import PatientProfile from './pages/Patient/profile';
 import Home from './pages/Home';
 import About from './pages/about';
 
-import MyPatients from './pages/MyPatients';
 
 
 function App() {
@@ -46,7 +45,7 @@ function App() {
           <Route path="/admin/offices" element={<AdminOffices />} />
           <Route path="/admin/patients" element={<AdminPatients />} /> 
           <Route path="/appointmentsGuest" element={<AppointmentsGuest />} />
-          <Route path='/appointmentList' element={<appointmentList />} />      
+          <Route path='/appointmentList' element={<AppointmentList />} />      
           <Route path='/scheduleAppointment' element={<ScheduleAppointment />} />   
           <Route path="/patient/login-signup" element={<PatientLoginSignup />} />
           <Route path='/partners/login-signup' element={<PartnersLoginSignup />} />
