@@ -83,7 +83,7 @@ const LoginSignup = () => {
           const token = response.data.token; // server return the token in this field
           localStorage.setItem('authToken', token); //Store the token in localStorage
           localStorage.setItem('userRole', response.data.userRole || 'guest'); //Store user role if available
-          navigate('/dashboard');
+          navigate('/patientdashboard');
           window.location.reload();
         }
 

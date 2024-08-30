@@ -14,7 +14,7 @@ import AppointmentList from './pages/Appointments/appointmentList';
 import PatientLoginSignup from './pages/Auth/login_Signup';
 import PartnersLoginSignup from './pages/Auth/partners_signup_login';
 import AdminDashboard from './pages/Dashboard/adminDashboard';
-import PatientDashboard from './pages/Dashboard/dashboard';
+import PatientDashboard from './pages/Dashboard/patientDashboard';
 import DoctorDashboard from './pages/Dashboard/doctorDashboard';
 import PatientDoctors from './pages/Patient/doctors';
 import PatientMedicalRecords from './pages/Patient/medicalRecords';

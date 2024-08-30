@@ -25,6 +25,7 @@ function index({ userRole }) {
           <Nav.Link as={Link} to="/patient/doctors">Doctors</Nav.Link>
           <Nav.Link as={Link} to="/patient/medical-records">Medical Records</Nav.Link>
           <Nav.Link as={Link} to="/patient/profile">Profile</Nav.Link>  
+          <Nav.Link as={Link} to= "/scheduleAppointment">Make an appointment</Nav.Link>
         </>
        )}
        {userRole === 'admin' && (
@@ -49,7 +50,9 @@ function index({ userRole }) {
         <>
         <Nav.Link as={Link} to="/about">About Us</Nav.Link>
         <Nav.Link as={Link} to="/contact">Contact Us</Nav.Link>
+        <Nav.Link as={Link} to= "/scheduleAppointment">Make an appointment</Nav.Link>
         <Nav.Link as={Link} to="/partners/login-signup">Partner Login/Signup</Nav.Link>
+
         </>
        )}
       </Nav>
