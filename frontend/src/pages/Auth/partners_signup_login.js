@@ -123,9 +123,19 @@ const PartnersLoginSignup = () => {
         //Redirect to the dashboard after succesful login
         if (action === "Login") {
           const token = response.data.token; // server return the token in this field
+          const userRole = response.data.userRole || 'guest'; // get user role from the response
+
           localStorage.setItem('authToken', token); //Store the token in localStorage
           localStorage.setItem('userRole', response.data.userRole || 'guest'); //Store user role if available
-          navigate('/dashboard');
+
+          // Redirect based on the user role
+          if (userRole === 'admin') {
+            navigate('/adminDashboard');
+          } else {
+            navigate('/doctorDashboard');
+          }
+  
+          
           window.location.reload();
         }
 

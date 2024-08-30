@@ -219,6 +219,15 @@ app.get('/appointments', verifyJWT, async (req, res) => {
     }
 });
 
+app.get('/doctors', verifyJWT, async (req, res) => {
+    try {
+        const [doctors] = await pool.query('SELECT * FROM doctor');
+        res.json(doctors);
+    } catch (err) {
+        console.error('Error fetching doctors:', err);
+        res.status(500).json({ message: 'Error fetching doctors' });
+    }
+});
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

@@ -11,6 +11,11 @@ const AdminDashboard = () => {
     // Fetch appointments, doctors, and offices when the component loads
     const fetchData = async () => {
       try {
+        const token = localStorage.getItem('authToken'); // Get the token from localStorage
+        const config = {
+          header: { Authorization: `Bearer ${token}`}
+        };
+
         const appointmentsRes = await axios.get('/appointments');
         const doctorsRes = await axios.get('/doctors');
         const officesRes = await axios.get('/offices');
@@ -67,4 +72,4 @@ return (
 
 };
 
-export default admindashboard
+export default AdminDashboard
