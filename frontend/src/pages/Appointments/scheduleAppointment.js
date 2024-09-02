@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../styles/scheduleAppointments.css';
 import office_icon from '../../components/Assets/office.png'
@@ -47,6 +46,7 @@ const ScheduleAppointment = () => {
         });
 
         alert('Appointment scheduled successfully!');
+        
       } catch (error) {
         console.error('Error scheduling appointment:', error);
       }
