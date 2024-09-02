@@ -16,9 +16,9 @@ const AdminDashboard = () => {
           header: { Authorization: `Bearer ${token}`}
         };
 
-        const appointmentsRes = await axios.get('/appointments');
-        const doctorsRes = await axios.get('/doctors');
-        const officesRes = await axios.get('/offices');
+        const appointmentsRes = await axios.get('/appointments', config);
+        const doctorsRes = await axios.get('/doctors', config);
+        const officesRes = await axios.get('/offices', config);
 
         setAppointments(appointmentsRes.data);
         setDoctors(doctorsRes.data);
