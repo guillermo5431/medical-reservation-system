@@ -26,16 +26,30 @@ const loginLimiter = rateLimit({
 
 // JWT Verification Middleware
 const verifyJWT = (req, res, next) => {
-    const token = req.header('Authorization').split(' ')[1];
-    if (!token) return res.status(401).json({ message: 'Access Denied' });
+    const authHeader = req.header('Authorization');
+    
+    // Check if the Authorization is present
+    if (!authHeader) {
+        return res.status(401).json({ message: 'Access Denied: No Token Provided' });       
+    }
+
+    // Split the Authorization header to get the token part
+    const token = authHeader.split(' ')[1];
+
+    // Check if the token is present after the split
+    if (!token) {
+        return res.status(401).json({ message: 'Access Denied: Malformed Token' });       
+    }
 
     try {
+        // Verify the token using the JWT secret
         const verified = jwt.verify(token, jwtSecret);
         req.user = verified;
-        next();
+        next(); // Proceed to the next middleware or route handler
     } catch (err) {
         res.status(400).json({ message: 'Invalid Token' });
     }
+
 }
 
 app.post('/partner/login', async (req, res) => {
@@ -199,6 +213,7 @@ app.post('/patient/signup', async (req, res) => {
 
 // fetching office data
 app.get('/offices', async (req, res) => {
+
     try {
         const [offices] = await pool.query('SELECT office_id, address, city, state from office');
         res.json(offices);
@@ -220,15 +235,57 @@ app.get('/appointments', verifyJWT, async (req, res) => {
 });
 
 app.get('/doctors', verifyJWT, async (req, res) => {
+    const { officeId } = req.query;
+
     try {
-        const [doctors] = await pool.query('SELECT * FROM doctor');
-        res.json(doctors);
+        if (officeId){
+            const [doctors] = await pool.query('SELECT * FROM doctor');
+            res.json(doctors);
+        } else {
+            res.status(400). json({ message: 'Office ID is required' });
+        }
     } catch (err) {
         console.error('Error fetching doctors:', err);
         res.status(500).json({ message: 'Error fetching doctors' });
     }
 });
 
+// Scheduling appointment
+app.post('/appointments', verifyJWT, async (req, res) => {
+    const { patient_id, office_id, doctor_id, date , slotted_time, specialist_status, specialist_type } = req.nody;
+
+    try {
+        // Validate required fields
+        if (!patient_id || !office_id || !doctor_id || !date || !slotted_time || typeof specialist_status === 'undefined') {
+            return res.status(400).json({ message: 'All required fields must be filled' });
+        }
+        
+        // Validate and convert status_name to appointment_status_id
+        const statusMap = {
+            'scheduled': 1, 
+            'compledted': 2,
+            'canceled': 3,
+            'no show': 4
+        };
+
+        const appointment_status_id = statusMap[status_name] || 0; // Default to 'pending' if status_name is invalid
+
+        // Insert the appointment into the database
+        const [result] = await pool.query(
+            'INSERT INTO appointment (patient_id, doctor_id, office_id, appointment_status_id, date, slotted_time, specialist_status, specialist_type) VALUE (?, ?, ?, ?, ?, ?, ?, ?)',
+            [patient_id, doctor_id, office_id, appointment_status_id, date, slotted_time, specialist_status, specialist_type]
+        );
+
+        res.status(201).json({ message: 'Appointment scheduled successfully', appointmentId: result.insertId });
+    } catch (err) {
+        console.error('Error scheduling appointment:', err);
+        res.status(500).json({ message: 'Error scheduling appointment' });
+    }
+});
+
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
+

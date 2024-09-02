@@ -65,9 +65,11 @@ CREATE TABLE `appointment` (
   KEY `appointment_doctor_id_idx` (`doctor_id`),
   KEY `appointment_office_id_idx` (`office_id`),
   KEY `appointment_patient_id_idx` (`patient_id`),
+  KEY `appointment_status_id_idx` (`appointment_status_id`),
   CONSTRAINT `appointment_doctor_id` FOREIGN KEY (`doctor_id`) REFERENCES `doctor` (`doctor_id`),
   CONSTRAINT `appointment_office_id` FOREIGN KEY (`office_id`) REFERENCES `office` (`office_id`),
-  CONSTRAINT `appointment_patient_id` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`patient_id`)
+  CONSTRAINT `appointment_patient_id` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`patient_id`),
+  CONSTRAINT `appointment_status_id` FOREIGN KEY (`appointment_status_id`) REFERENCES `appointment_status` (`appointment_status_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -88,9 +90,9 @@ DROP TABLE IF EXISTS `appointment_status`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `appointment_status` (
-  `idappointment_status` int NOT NULL AUTO_INCREMENT,
-  `status_name` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`idappointment_status`)
+  `appointment_status_id` int NOT NULL AUTO_INCREMENT,
+  `status_name` enum('scheduled','completed','canceled','no show') DEFAULT NULL,
+  PRIMARY KEY (`appointment_status_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -121,7 +123,7 @@ CREATE TABLE `doctor` (
   KEY `doctor_office_id_idx` (`office_id`),
   CONSTRAINT `doctor_office_id` FOREIGN KEY (`office_id`) REFERENCES `office` (`office_id`),
   CONSTRAINT `doctor_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -130,6 +132,7 @@ CREATE TABLE `doctor` (
 
 LOCK TABLES `doctor` WRITE;
 /*!40000 ALTER TABLE `doctor` DISABLE KEYS */;
+INSERT INTO `doctor` VALUES (1,6,11,'Physician','patel');
 /*!40000 ALTER TABLE `doctor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -147,7 +150,7 @@ CREATE TABLE `office` (
   `state` varchar(2) DEFAULT NULL,
   `phone_number` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`office_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -156,6 +159,7 @@ CREATE TABLE `office` (
 
 LOCK TABLES `office` WRITE;
 /*!40000 ALTER TABLE `office` DISABLE KEYS */;
+INSERT INTO `office` VALUES (11,'123 Main St','Los Angeles','CA','2135551234'),(12,'456 Elm St','New York','NY','2125555678'),(13,'789 Oak St','Chicago','IL','3125557890'),(14,'101 Pine St','Houston','TX','7135551011'),(15,'202 Maple St','Phoenix','AZ','6025552022'),(16,'303 Cedar St','Philadelphia','PA','2155553033'),(17,'404 Birch St','San Antonio','TX','2105554044'),(18,'505 Spruce St','San Diego','CA','6195555055'),(19,'606 Willow St','Dallas','TX','2145556066'),(20,'707 Ash St','San Jose','CA','4085557077');
 /*!40000 ALTER TABLE `office` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -179,7 +183,7 @@ CREATE TABLE `patient` (
   KEY `patient_doctor_id_idx` (`primary_physician_id`),
   CONSTRAINT `patient_doctor_id` FOREIGN KEY (`primary_physician_id`) REFERENCES `doctor` (`doctor_id`),
   CONSTRAINT `patient_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -188,6 +192,7 @@ CREATE TABLE `patient` (
 
 LOCK TABLES `patient` WRITE;
 /*!40000 ALTER TABLE `patient` DISABLE KEYS */;
+INSERT INTO `patient` VALUES (1,7,NULL,'noal','2002-02-05','123 apple st','Male');
 /*!40000 ALTER TABLE `patient` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -234,7 +239,7 @@ CREATE TABLE `user` (
   `role` enum('admin','doctor','patient') NOT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -243,6 +248,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (6,'patel.brown@example.com','$2b$10$J3Uv00J2CN6u50SUBpM/reyLNApY0lvSPbX0phbDI5kJYlqwHkvbq','2345671234','doctor'),(7,'noal.preston@example.com','$2b$10$6g6EHL.I2PAzwmZT91eaMu..byBacvsX8rOuov9Nw.seplxB0t2VK','3452341234','patient');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -255,4 +261,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-01 21:05:53
+-- Dump completed on 2024-09-02  8:50:36

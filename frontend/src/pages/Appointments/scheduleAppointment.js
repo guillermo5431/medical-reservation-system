@@ -11,10 +11,16 @@ const ScheduleAppointment = () => {
   const [appointmentDate, setAppointmentDate] = useState('');
   const [appointmentTime, setAppointmentTime] = useState('');
 
+  const authToken = localStorage.getItem('authToken');
+
   useEffect(() => {
     const fetchOffices = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/offices');
+        const response = await axios.get('http://localhost:3001/offices', {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
         setOffices(response.data);
       } catch (error) {
         console.error('Error fetching offices:', error);
@@ -22,13 +28,17 @@ const ScheduleAppointment = () => {
     };
 
     fetchOffices();
-  }, []);
+  }, [authToken]);
 
   const handleBookAppointment = async (officeId) => {
     setSelectedOffice(officeId);
 
     try {
-      const response = await axios.get(`http://localhost:3001/doctors?officeId=${officeId}`);
+      const response = await axios.get(`http://localhost:3001/doctors?officeId=${officeId}`,{
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
       setDoctors(response.data);
     } catch (error) {
       console.error('Error fetching doctors:', error);
@@ -38,12 +48,20 @@ const ScheduleAppointment = () => {
   const handleScheduleAppointment = async () => {
     if (selectedDoctor && appointmentDate && appointmentTime) {
       try {
-        await axios.post('http://localhost:3001/appointments', {
+        await axios.post(
+          'http://localhost:3001/appointments', 
+        {
           office_id: selectedOffice,
           doctor_id: selectedDoctor,
           date: appointmentDate,
           time: appointmentTime,
-        });
+        }, 
+        {          
+          headers: {
+            Authorization: `Bearer ${authToken}`
+          },
+        }
+      );
 
         alert('Appointment scheduled successfully!');
         
