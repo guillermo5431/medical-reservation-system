@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 9.0.1, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: medicaldb
+-- Host: localhost    Database: medicaldb
 -- ------------------------------------------------------
--- Server version	8.0.39
+-- Server version	9.0.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -36,6 +36,15 @@ CREATE TABLE `admin` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `admin`
+--
+
+LOCK TABLES `admin` WRITE;
+/*!40000 ALTER TABLE `admin` DISABLE KEYS */;
+/*!40000 ALTER TABLE `admin` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `appointment`
 --
 
@@ -51,6 +60,7 @@ CREATE TABLE `appointment` (
   `date` date NOT NULL,
   `slotted_time` time NOT NULL,
   `specialist_status` tinyint NOT NULL,
+  `specialist_type` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`appointment_id`),
   KEY `appointment_doctor_id_idx` (`doctor_id`),
   KEY `appointment_office_id_idx` (`office_id`),
@@ -60,6 +70,15 @@ CREATE TABLE `appointment` (
   CONSTRAINT `appointment_patient_id` FOREIGN KEY (`patient_id`) REFERENCES `patient` (`patient_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `appointment`
+--
+
+LOCK TABLES `appointment` WRITE;
+/*!40000 ALTER TABLE `appointment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `appointment` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `appointment_status`
@@ -74,6 +93,15 @@ CREATE TABLE `appointment_status` (
   PRIMARY KEY (`idappointment_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `appointment_status`
+--
+
+LOCK TABLES `appointment_status` WRITE;
+/*!40000 ALTER TABLE `appointment_status` DISABLE KEYS */;
+/*!40000 ALTER TABLE `appointment_status` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `doctor`
@@ -97,6 +125,15 @@ CREATE TABLE `doctor` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `doctor`
+--
+
+LOCK TABLES `doctor` WRITE;
+/*!40000 ALTER TABLE `doctor` DISABLE KEYS */;
+/*!40000 ALTER TABLE `doctor` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `office`
 --
 
@@ -112,6 +149,15 @@ CREATE TABLE `office` (
   PRIMARY KEY (`office_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `office`
+--
+
+LOCK TABLES `office` WRITE;
+/*!40000 ALTER TABLE `office` DISABLE KEYS */;
+/*!40000 ALTER TABLE `office` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `patient`
@@ -137,6 +183,15 @@ CREATE TABLE `patient` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `patient`
+--
+
+LOCK TABLES `patient` WRITE;
+/*!40000 ALTER TABLE `patient` DISABLE KEYS */;
+/*!40000 ALTER TABLE `patient` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `patientspecialistapproval`
 --
 
@@ -156,6 +211,15 @@ CREATE TABLE `patientspecialistapproval` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `patientspecialistapproval`
+--
+
+LOCK TABLES `patientspecialistapproval` WRITE;
+/*!40000 ALTER TABLE `patientspecialistapproval` DISABLE KEYS */;
+/*!40000 ALTER TABLE `patientspecialistapproval` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user`
 --
 
@@ -172,6 +236,15 @@ CREATE TABLE `user` (
   UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -182,4 +255,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-27 18:06:47
+-- Dump completed on 2024-09-01 21:05:53
