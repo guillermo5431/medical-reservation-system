@@ -59,7 +59,6 @@ CREATE TABLE `appointment` (
   `appointment_status_id` int NOT NULL DEFAULT '0',
   `date` date NOT NULL,
   `slotted_time` time NOT NULL,
-  `specialist_status` tinyint NOT NULL,
   `specialist_type` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`appointment_id`),
   KEY `appointment_doctor_id_idx` (`doctor_id`),
@@ -261,4 +260,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-02  8:50:36
+-- Dump completed on 2024-09-03 18:19:52

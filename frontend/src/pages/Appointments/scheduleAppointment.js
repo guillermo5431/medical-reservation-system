@@ -10,11 +10,14 @@ const ScheduleAppointment = () => {
   const [selectedDoctor, setSelectedDoctor] = useState('');
   const [appointmentDate, setAppointmentDate] = useState('');
   const [appointmentTime, setAppointmentTime] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const authToken = localStorage.getItem('authToken');
 
   useEffect(() => {
     const fetchOffices = async () => {
+      setLoading(true);
       try {
         const response = await axios.get('http://localhost:3001/offices', {
           headers: {
@@ -23,7 +26,9 @@ const ScheduleAppointment = () => {
         });
         setOffices(response.data);
       } catch (error) {
-        console.error('Error fetching offices:', error);
+        setError('Error fetching offices. Please try again later.')
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -31,8 +36,17 @@ const ScheduleAppointment = () => {
   }, [authToken]);
 
   const handleBookAppointment = async (officeId) => {
+    if (selectedDoctor && appointmentDate && appointmentTime) {
+      //Validation
+      if (new Date(appointmentDate) < new Date()) {
+        alert('The appointment date cannot be in the past.');
+        return;
+      }
+    }
+    
     setSelectedOffice(officeId);
 
+    setLoading(true);
     try {
       const response = await axios.get(`http://localhost:3001/doctors?officeId=${officeId}`,{
         headers: {
@@ -41,12 +55,16 @@ const ScheduleAppointment = () => {
       });
       setDoctors(response.data);
     } catch (error) {
-      console.error('Error fetching doctors:', error);
+      setError('Error fetching doctors. Please try again later.');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleScheduleAppointment = async () => {
     if (selectedDoctor && appointmentDate && appointmentTime) {
+
+      setLoading(true);
       try {
         await axios.post(
           'http://localhost:3001/appointments', 
@@ -66,7 +84,9 @@ const ScheduleAppointment = () => {
         alert('Appointment scheduled successfully!');
         
       } catch (error) {
-        console.error('Error scheduling appointment:', error);
+        setError('Error scheduling appointment. Please try again later.');
+      } finally {
+        setLoading(false);
       }
     } else {
        alert('Please select a doctor, date, and time for the appointment.');
@@ -75,6 +95,9 @@ const ScheduleAppointment = () => {
 
   return (
     <div className='schedule-appointment-container'>
+      {loading && <p>Loading...</p>}
+      {error && <p className='error-message'>{error}</p>}
+
       <h2>Select an Office Location</h2>
       <div className='office-list'>
         {offices.map((office) => (

@@ -252,28 +252,27 @@ app.get('/doctors', verifyJWT, async (req, res) => {
 
 // Scheduling appointment
 app.post('/appointments', verifyJWT, async (req, res) => {
-    const { patient_id, office_id, doctor_id, date , slotted_time, specialist_status, specialist_type } = req.nody;
+    const { patient_id } = req.user; // Extract patient_id from the JWT`
+    
+    const {  office_id, doctor_id, date , slotted_time, specialist_type } = req.body;
 
     try {
         // Validate required fields
-        if (!patient_id || !office_id || !doctor_id || !date || !slotted_time || typeof specialist_status === 'undefined') {
+        if ( !office_id || !doctor_id || !date || !slotted_time) {
             return res.status(400).json({ message: 'All required fields must be filled' });
         }
         
-        // Validate and convert status_name to appointment_status_id
-        const statusMap = {
-            'scheduled': 1, 
-            'compledted': 2,
-            'canceled': 3,
-            'no show': 4
-        };
+        // Convert date and time to the proper format if necessary 
+        const appointmentDate = new Date(date);
+        const appointmentTime = new Date(`1970-01-01T${slotted_time}Z`);
 
-        const appointment_status_id = statusMap[status_name] || 0; // Default to 'pending' if status_name is invalid
-
+        // Default appointment_status_id to 'scheduled' (id=1)
+        const appointment_status_id = 1; // Assuming 'scheduled' has id = 1
+        
         // Insert the appointment into the database
         const [result] = await pool.query(
-            'INSERT INTO appointment (patient_id, doctor_id, office_id, appointment_status_id, date, slotted_time, specialist_status, specialist_type) VALUE (?, ?, ?, ?, ?, ?, ?, ?)',
-            [patient_id, doctor_id, office_id, appointment_status_id, date, slotted_time, specialist_status, specialist_type]
+            'INSERT INTO appointment (patient_id, doctor_id, office_id, appointment_status_id, date, slotted_time, specialist_type) VALUE (?, ?, ?, ?, ?, ?, ?)',
+            [patient_id, doctor_id, office_id, appointment_status_id, appointmentDate, appointmentTime.toTimeString().split(' ')[0], specialist_type]
         );
 
         res.status(201).json({ message: 'Appointment scheduled successfully', appointmentId: result.insertId });
