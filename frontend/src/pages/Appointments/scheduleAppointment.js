@@ -26,8 +26,9 @@ const ScheduleAppointment = () => {
         });
         setOffices(response.data);
       } catch (error) {
-        setError('Error fetching offices. Please try again later.')
-      } finally {
+        console.error('Error scheduling appointment:', error.response ? error.response.data : error.message);
+        setError('Error scheduling appointment. Please try again later.');
+      }finally {
         setLoading(false);
       }
     };
@@ -72,7 +73,7 @@ const ScheduleAppointment = () => {
           office_id: selectedOffice,
           doctor_id: selectedDoctor,
           date: appointmentDate,
-          time: appointmentTime,
+          slotted_time: appointmentTime,
         }, 
         {          
           headers: {
