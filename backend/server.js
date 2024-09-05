@@ -154,13 +154,22 @@ app.post('/patient/login', async (req,res) => {
 
         // Directly access the role
         const role = user.role;
-
         if (role !== 'patient') {
             return res.status(401).json({ message: 'Unauthorized login attempt' });
         }
 
+        // Retrieve patient id by using user id
+        const [patientResult] = await pool.query('SELECT patient_id FROM patient WHERE user_id = ?', [user.user_id]);
+
+        if (patientResult.length === 0) {
+            return res.status(404).json({ message: 'Patient record not found'});
+        }
+
+        const patient = patientResult[0];
+
         // Create JWT token 
-        const token = jwt.sign({ id: user.user_id, role }, jwtSecret, {expiresIn: '1h'});
+        const token = jwt.sign({ id: user.user_id, patient_id: patient.patient_id, role }, jwtSecret, {expiresIn: '1h'});
+        
         res.json({ message: 'Login successful', token, userRole: role});
     } catch (err) {
         console.error('Error during patient login', err);
@@ -252,6 +261,7 @@ app.get('/doctors', verifyJWT, async (req, res) => {
 
 // Scheduling appointment
 app.post('/appointments', verifyJWT, async (req, res) => {
+    console.log(req.user); // Check what's in req.user
     const { patient_id } = req.user; // Extract patient_id from the JWT`
     
     const {  office_id, doctor_id, date , slotted_time, specialist_type } = req.body;
