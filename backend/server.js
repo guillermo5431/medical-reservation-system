@@ -230,6 +230,78 @@ app.get('/profile', verifyJWT, async (req, res) => {
     }
 });
 
+
+// fetching office data
+app.get('/offices', async (req, res) => {
+
+    try {
+        const [offices] = await pool.query('SELECT office_id, address, city, state from office');
+        res.json(offices);
+    } catch (err) {
+        console.error('Error fetching offices:', err);
+        res.status(500).json({ message: 'Error fetching offices' });
+    }
+});
+
+// fetching appointment data
+app.get('/appointments', verifyJWT, async (req, res) => {
+    try {
+        const [appointments] = await pool.query('SELECT * FROM appointment');
+        res.json(appointments);
+    } catch (err) {
+        console.error('Error fetching appointments:', err);
+        res.status(500).json({ message: 'Error fetching appointments' });
+    }
+});
+
+app.get('/doctors', verifyJWT, async (req, res) => {
+    const { officeId } = req.query;
+
+    try {
+        if (officeId){
+            const [doctors] = await pool.query('SELECT * FROM doctor');
+            res.json(doctors);
+        } else {
+            res.status(400). json({ message: 'Office ID is required' });
+        }
+    } catch (err) {
+        console.error('Error fetching doctors:', err);
+        res.status(500).json({ message: 'Error fetching doctors' });
+    }
+});
+
+// Scheduling appointment
+app.post('/appointments', verifyJWT, async (req, res) => {
+    console.log(req.user); // Check what's in req.user
+    const { patient_id } = req.user; // Extract patient_id from the JWT`
+    
+    const {  office_id, doctor_id, date , slotted_time, specialist_type } = req.body;
+
+    try {
+        // Validate required fields
+        if ( !office_id || !doctor_id || !date || !slotted_time) {
+            return res.status(400).json({ message: 'All required fields must be filled' });
+        }
+        
+        // Convert date and time to the proper format if necessary 
+        const appointmentDate = new Date(date);
+        const appointmentTime = new Date(`1970-01-01T${slotted_time}Z`);
+
+        // Default appointment_status_id to 'scheduled' (id=1)
+        const appointment_status_id = 1; // Assuming 'scheduled' has id = 1
+        
+        // Insert the appointment into the database
+        const [result] = await pool.query(
+            'INSERT INTO appointment (patient_id, doctor_id, office_id, appointment_status_id, date, slotted_time, specialist_type) VALUE (?, ?, ?, ?, ?, ?, ?)',
+            [patient_id, doctor_id, office_id, appointment_status_id, appointmentDate, appointmentTime.toTimeString().split(' ')[0], specialist_type]
+        );
+
+        res.status(201).json({ message: 'Appointment scheduled successfully', appointmentId: result.insertId });
+    } catch (err) {
+        console.error('Error scheduling appointment:', err);
+        res.status(500).json({ message: 'Error scheduling appointment' });
+    }
+});
 // Start the server and listen on the specified port
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
