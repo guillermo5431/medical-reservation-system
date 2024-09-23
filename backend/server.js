@@ -193,9 +193,16 @@ app.post('/patient/signup', async (req, res) => {
         const user_id = userResult.insertId;
 
         // Insert the new patient into the patient-specific table
-        await connection.query(
+        const [patientResult] = await connection.query(
             'INSERT INTO patient (user_id, name, birth_date, gender, address) VALUES (?, ?, ?, ?, ?)',
             [user_id, name, birthDate, gender, address]
+        );
+
+        const patient_id = patientResult.insertId;
+
+        await connection.query(
+            'INSERT INTO patientspecialistapproval (patient_id, specialist-type, status) VALUES (?, ?, ?)',
+            [patient_id, 'physician', 'pending']
         );
 
         await connection.commit(); // Commit the transaction if successful
@@ -256,14 +263,33 @@ app.get('/appointments', verifyJWT, async (req, res) => {
 
 app.get('/doctors', verifyJWT, async (req, res) => {
     const { officeId } = req.query;
+    const { patient_id } = req.user;
 
     try {
-        if (officeId){
-            const [doctors] = await pool.query('SELECT * FROM doctor');
-            res.json(doctors);
-        } else {
-            res.status(400). json({ message: 'Office ID is required' });
+        if (!officeId) {
+            return res.status(400).json({message: "Office ID is required"});
         }
+
+        // Query to get the patient's specialist type
+        const [patientSpecialist] = await pool.query(
+            'SELECT specialist_type FROM patientspecialistapproval WHERE patient_id = ?',
+            [patient_id]
+        );
+
+        if (patientSpecialist.length === 0) {
+            return res.status(404).json({ message: 'Patient specialist type not found'});
+        }
+
+        const specialistType = patientSpecialist[0].specialist_type;
+
+        // Fetch doctors based on officeId and patient's specialist type
+        const [doctors] = await pool.query(
+            'SELECT * FROM doctor WHERE office_id = ? AND specialty = ?',
+            [officeId, specialistType]
+        );
+
+
+        res.json(doctor);
     } catch (err) {
         console.error('Error fetching doctors:', err);
         res.status(500).json({ message: 'Error fetching doctors' });
@@ -287,8 +313,14 @@ app.post('/appointments', verifyJWT, async (req, res) => {
         const appointmentDate = new Date(date);
         const appointmentTime = new Date(`1970-01-01T${slotted_time}Z`);
 
-        // Default appointment_status_id to 'scheduled' (id=1)
-        const appointment_status_id = 1; // Assuming 'scheduled' has id = 1
+        // Insert the status into the appointment_status table
+        const statusName = 'scheduled'; // Define the initial status name
+        const [statusResult] = await pool.query(
+            'INSERT INTO appointment_status (status_name) VALUES (?)',
+            [statusName]
+        )
+
+        const appointment_status_id = statusResult.insertId; // Get the new status ID 
         
         // Insert the appointment into the database
         const [result] = await pool.query(
