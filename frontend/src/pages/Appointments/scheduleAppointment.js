@@ -15,6 +15,7 @@ const ScheduleAppointment = () => {
   const [appointmentTime, setAppointmentTime] = useState(''); // Appointment time
   const [loading, setLoading] = useState(false); // Loading state to indicate data fetching
   const [error, setError] = useState(null); // Error message state
+  const [specialistType, setSpecialistType] = useState(''); // State to manage selected specialist type
 
   // Retrieve the authentication token from local storage
   const authToken = localStorage.getItem('authToken');
@@ -56,6 +57,7 @@ const ScheduleAppointment = () => {
     setLoading(true); // Start loading
     try {
       const response = await axios.get(`http://localhost:3001/doctors?officeId=${officeId}`, {
+       params: { officeId, specialistType }, // Pass the selected specialist type to the backend
         headers: {
           Authorization: `Bearer ${authToken}`, // Include the auth token in the request headers
         },
@@ -89,9 +91,7 @@ const ScheduleAppointment = () => {
             },
           }
         );
-
         alert('Appointment scheduled successfully!'); // Notify user of success
-        
       } catch (error) {
         setError('Error scheduling appointment. Please try again later.'); // Set error message if request fails
       } finally {
@@ -133,6 +133,8 @@ const ScheduleAppointment = () => {
       {selectedOffice && (
         <div className='appointment-details'>
           <h2>Schedule an Appointment</h2>
+
+          <label htmlFor='spe'
 
           <label htmlFor='doctor-select'>Select Doctor:</label>
           <select 
